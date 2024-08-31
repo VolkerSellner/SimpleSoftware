@@ -8,7 +8,7 @@ document.getElementById('saveButton').addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('/api/saveName', {
+        const response = await fetch('/api/names', { // Endpunkt auf /api/names ändern
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ firstName, lastName })
@@ -39,7 +39,7 @@ document.getElementById('deleteButton').addEventListener('click', async () => {
     const id = lastListItem.getAttribute('data-id');
 
     try {
-        const response = await fetch(`/api/deleteName/${id}`, {
+        const response = await fetch(`/api/names/${id}`, { // Endpunkt auf /api/names/${id} ändern
             method: 'DELETE'
         });
 
@@ -57,7 +57,7 @@ document.getElementById('deleteButton').addEventListener('click', async () => {
 
 async function loadNames() {
     try {
-        const response = await fetch('/api/getNames');
+        const response = await fetch('/api/names'); // Endpunkt auf /api/names ändern
         if (response.ok) {
             const names = await response.json();
             names.forEach(name => {

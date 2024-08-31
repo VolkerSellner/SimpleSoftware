@@ -22,16 +22,21 @@ async function saveName(req, res) {
 async function deleteName(req, res) {
     try {
         const db = await getDb();
-        const result = await db.deleteOne({ _id: new require('mongodb').ObjectId(req.params.id) });
+        // Verwenden Sie den new-Operator für ObjectId
+        const objectId = new require('mongodb').ObjectId(req.params.id);
+        const result = await db.deleteOne({ _id: objectId });
         if (result.deletedCount === 1) {
             res.status(200).send({ message: 'Name gelöscht' });
         } else {
             res.status(404).send({ message: 'Name nicht gefunden' });
         }
     } catch (err) {
+        console.error('Fehler beim Löschen des Namens:', err);
         res.status(500).send({ error: 'Fehler beim Löschen des Namens' });
     }
 }
+
+
 
 async function getNames(req, res) {
     try {
