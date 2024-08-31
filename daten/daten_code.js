@@ -1,6 +1,4 @@
-// daten/daten_code.js
-
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const uri = "mongodb://localhost:27017/";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -22,8 +20,8 @@ async function saveName(req, res) {
 async function deleteName(req, res) {
     try {
         const db = await getDb();
-        // Verwenden Sie den new-Operator für ObjectId
-        const objectId = new require('mongodb').ObjectId(req.params.id);
+        // Hier importieren wir ObjectId direkt
+        const objectId = new ObjectId(req.params.id);
         const result = await db.deleteOne({ _id: objectId });
         if (result.deletedCount === 1) {
             res.status(200).send({ message: 'Name gelöscht' });
@@ -35,8 +33,6 @@ async function deleteName(req, res) {
         res.status(500).send({ error: 'Fehler beim Löschen des Namens' });
     }
 }
-
-
 
 async function getNames(req, res) {
     try {
