@@ -8,7 +8,7 @@ document.getElementById('saveButton').addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('/api/names', { // Endpunkt auf /api/names ändern
+        const response = await fetch('/api/names', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ firstName, lastName })
@@ -27,25 +27,15 @@ document.getElementById('saveButton').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('deleteButton').addEventListener('click', async () => {
-    const nameList = document.getElementById('nameList');
-    const lastListItem = nameList.lastElementChild;
-
-    if (!lastListItem) {
-        alert('Keine Namen zum Löschen vorhanden');
-        return;
-    }
-
-    const id = lastListItem.getAttribute('data-id');
-
+async function deleteName(id) {
     try {
-        const response = await fetch(`/api/names/${id}`, { // Endpunkt auf /api/names/${id} ändern
+        const response = await fetch(`/api/names/${id}`, {
             method: 'DELETE'
         });
 
         if (response.ok) {
             alert('Name erfolgreich gelöscht!');
-            nameList.removeChild(lastListItem);
+            document.querySelector(`li[data-id="${id}"]`).remove();
         } else {
             alert('Fehler beim Löschen des Namens');
         }
@@ -53,11 +43,11 @@ document.getElementById('deleteButton').addEventListener('click', async () => {
         console.error('Error:', error);
         alert('Fehler beim Löschen des Namens');
     }
-});
+}
 
 async function loadNames() {
     try {
-        const response = await fetch('/api/names'); // Endpunkt auf /api/names ändern
+        const response = await fetch('/api/names');
         if (response.ok) {
             const names = await response.json();
             names.forEach(name => {
@@ -77,6 +67,12 @@ function addNameToList(id, firstName, lastName) {
     const listItem = document.createElement('li');
     listItem.textContent = `${firstName} ${lastName}`;
     listItem.setAttribute('data-id', id);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Löschen';
+    deleteButton.addEventListener('click', () => deleteName(id));
+
+    listItem.appendChild(deleteButton);
     nameList.appendChild(listItem);
 }
 
